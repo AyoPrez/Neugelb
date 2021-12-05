@@ -4,43 +4,40 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.ayoprez.moviesapp.R
+import com.ayoprez.moviesapp.databinding.FragmentMainBinding
 import com.ayoprez.moviesapp.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
+    private lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
-    private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = Navigation.findNavController(view)
 
-        val message = view.findViewById<TextView>(R.id.message)
-
-        message.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_detailsFragment) }
-
+        binding.recyclerview.adapter = LatestMoviesAdapter(viewModel.getLatestMovies().value)
     }
 
-    //    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-//        viewModel.getLatestMovies()
-//    }
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.getLatestMovies()
+    }
 }

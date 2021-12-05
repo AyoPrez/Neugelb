@@ -5,6 +5,6 @@ import com.ayoprez.moviesapp.model.MovieModel
 import retrofit2.Response
 
 interface MoviesRepo {
-    suspend fun getLatestMovies() : Response<MovieModel>
-    suspend fun getMovieDetails(id: String) : Response<MovieDetails>
+    suspend fun getLatestMovies() : Response<List<MovieModel>>
+    suspend fun getMovieDetails(id: Int) : Response<MovieDetails>
 }

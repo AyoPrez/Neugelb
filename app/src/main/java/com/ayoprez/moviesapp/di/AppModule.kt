@@ -11,22 +11,20 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    private const val BASE_URL = "https://developers.themoviedb.org/3"
+    private const val BASE_URL = "https://developers.themoviedb.org/3/"
 
-    @Singleton
+
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor()
         .apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-    @Singleton
     @Provides
     fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient
@@ -34,7 +32,6 @@ object AppModule {
             .addInterceptor(httpLoggingInterceptor)
             .build()
 
-    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -42,11 +39,9 @@ object AppModule {
         .client(okHttpClient)
         .build()
 
-    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): MoviesApi = retrofit.create(MoviesApi::class.java)
 
-    @Singleton
     @Provides
     fun providesRepository(moviesApi: MoviesApi):MoviesRepo = MoviesRepoImpl(moviesApi)
 }

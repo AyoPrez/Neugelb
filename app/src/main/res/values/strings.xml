@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MoviesApp</string>
+    <string name="latest_movies">Latest movies</string>
 </resources>
